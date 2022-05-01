@@ -64,7 +64,7 @@ function App() {
             <div style={{ minHeight: 350 }}>
               {step === 0 && <>
                 <Typography>
-                  It would take less than 30 seconds , and there are some suprise rewards at the end!
+                  We would love to read your precious feedback on the experience you had with us, which will help us serve you better. The feedback takes less than a minute and there is a lil suprise at the end.
                 </Typography>
 
               </>}
@@ -139,7 +139,7 @@ function App() {
 
               {step === 4 && <>
                 <Typography>
-                  Hey Darsheel, Thank you for taking your time to share your valuable feedback being a D2C First Brand It's super important for us.
+                  We're genuinely thankful for your valuable feedback. As a customer first brand, it really helps us understand how well we are able to serve our PatilKaki community. Here are the next steps-
                 </Typography>
 
                 <hr style={{ marginTop: 20, marginBottom: 50 }} />
