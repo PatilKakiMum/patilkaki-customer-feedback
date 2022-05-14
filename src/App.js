@@ -97,17 +97,49 @@ function App() {
   const setKeyValue = (key, value) => {
     let tempQuestions = [...questions];
     let questionIndex = questions.findIndex((obj => obj.key === key));
-    console.log({
-      questionIndex
-    });
     tempQuestions[questionIndex].value = value;
 
     setQuestions(tempQuestions);
     console.log({ tempQuestions, key, value })
   }
 
+  const setNextStep = (value) => {
+
+    if (value === 4) {
+      setLoading(true);
+
+      let finalValues = {};
+      finalValues.order_id = orderId;
+      let productsFeedback = [];
+      questions.map(item => {
+
+        if (item.key.includes('product-')) {
+          let sku = item.key.replace('product-', '');
+          productsFeedback.push({
+            sku,
+            value: item.value
+          })
+        } else {
+          finalValues[item.key] = item.value;
+        }
+        return true;
+      })
+
+      finalValues.products = productsFeedback;
+
+      axios.post(`https://ijapeekfjf.patilkaki.com/api/v2/feedback-submit/`, finalValues).then(data => {
+
+        setStep(value);
+        setLoading(false);
+      });
+
+
+    } else {
+      setStep(value);
+    }
+  }
   var AllInputsReceived = true;
-  var npsScore = 0;
+  let npsScore = 0;
 
   questions.map(question => {
     if (question.key === 'recommendationRating' && question.value)
@@ -131,7 +163,12 @@ function App() {
           <CardContent>
 
 
-            <Typography variant="h5" component="div">
+            <div style={{ marginTop: 10, marginBottom: 30 }}>
+
+              {(step > 0 && step < 4) && <LinearProgress variant="determinate" value={progressOutOf} />}
+            </div>
+
+            <Typography variant="h5" component="div" style={{ fontFamily: "Poppins", marginBottom: 40 }} >
               {step === 0 && `Hey ${orderData.first_name} ${orderData.last_name}`}
 
               {step === 1 && "Overall Experience"}
@@ -142,10 +179,6 @@ function App() {
 
             </Typography>
 
-            <div style={{ marginTop: 40, marginBottom: 30 }}>
-
-              {(step > 0 && step < 4) && <LinearProgress variant="determinate" value={progressOutOf} />}
-            </div>
 
             <div style={{ minHeight: 350 }}>
               {step === 0 && <>
@@ -167,13 +200,11 @@ function App() {
                         </Typography>
                         <Rating
                           name={question.key}
-                          value={question.value}
                           max={(question.key === 'recommendationRating' ? 10 : 5)}
                           onChange={(e, value) => setKeyValue(question.key, value)}
                           size='large'
                           style={{ fontSize: 40, marginTop: 5, marginBottom: 35 }}
                         />
-                        <Typography>Value :{question.value}</Typography>
                       </>
                     )
                   } else {
@@ -186,7 +217,7 @@ function App() {
                           id="outlined-multiline-static"
                           name={question.key}
                           value={question.value}
-                          onChange={(e, value) => setKeyValue(question.key, value)}
+                          onChange={(e) => setKeyValue(question.key, e.target.value)}
                           multiline
                           rows={4}
                           style={{ marginTop: 5, marginBottom: 35, width: '100%' }}
@@ -230,10 +261,12 @@ function App() {
                       </Grid>
                       <Grid item xs={10} style={{ textAlign: "left" }}  >
                         <Typography variant='h6' > Write a Social Review </Typography>
-                        <Typography variant='subtitle2'> Get a FLAT 20% Discount Code </Typography>
+                        <Typography variant='subtitle2'> Get a FLAT 20% Discount on your next order </Typography>
                       </Grid>
                     </Grid>
                   </a>
+
+                  <Typography style={{ textAlign: 'left', display: 'flex', paddingLeft: 20 }} variant='caption' >( Do share a screenshot of the review with us on whatsapp and we will send you your coupon code )</Typography>
 
                 </>}
 
@@ -242,7 +275,7 @@ function App() {
 
           </CardContent>
           <CardActions>
-            {step < 4 && <Button fullWidth disabled={!AllInputsReceived} variant='contained' onClick={() => setStep(step + 1)} > NEXT </Button>}
+            {step < 4 && <Button fullWidth disabled={!AllInputsReceived} variant='contained' onClick={() => setNextStep(step + 1)} > NEXT  </Button>}
           </CardActions>
         </>}
         {loading && <>
