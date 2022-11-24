@@ -60,7 +60,7 @@ function App() {
   useEffect(() => {
 
 
-    axios.get(`https://ijapeekfjf.patilkaki.com/api/v2/feedback-order/${orderId}`).then(data => {
+    axios.get(`https://do-backend.patilkaki.com/api/v2/feedback-order/${orderId}`).then(data => {
 
       setOrderData(data.data);
       setLoading(false);
@@ -127,7 +127,7 @@ function App() {
 
       finalValues.products = productsFeedback;
 
-      axios.post(`https://ijapeekfjf.patilkaki.com/api/v2/feedback-submit/`, finalValues).then(data => {
+      axios.post(`https://do-backend.patilkaki.com/api/v2/feedback-submit/`, finalValues).then(data => {
 
         setStep(value);
         setLoading(false);
