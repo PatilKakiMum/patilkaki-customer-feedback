@@ -60,7 +60,7 @@ function App() {
   useEffect(() => {
 
 
-    axios.get(`https://flexy.coyogi.com/api/v2/feedback-order/${orderId}`).then(data => {
+    axios.get(`https://flexy-aws.coyogi.com/ms/customer/delivery-partner/feedback-order/${orderId}`).then(data => {
 
       setOrderData(data.data);
       setLoading(false);
@@ -127,7 +127,7 @@ function App() {
 
       finalValues.products = productsFeedback;
 
-      axios.post(`https://flexy.coyogi.com/api/v2/feedback-submit/`, finalValues).then(data => {
+			axios.post(`https://flexy-aws.coyogi.com/ms/customer/delivery-partner/feedback-submit/`, finalValues).then(data => {
 
         setStep(value);
         setLoading(false);
